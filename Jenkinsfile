@@ -14,6 +14,11 @@ pipeline {
                 sh 'npm install'
             }
         }
+        stage('Build docker image') {
+            steps {
+                echo 'docker build -t pas_a/node-react-app:$(git describe --tags --abbrev=0) .'
+            }
+        }
         stage('Test') {
                     steps {
                         sh './jenkins/scripts/test.sh'
@@ -26,6 +31,11 @@ pipeline {
                                 sh './jenkins/scripts/kill.sh'
                             }
                         }
+        stage('Deployment') {
+            steps {
+                echo 'kubectl apply -f app-cd.yaml'
+            }
+        }
 
     }
 }
